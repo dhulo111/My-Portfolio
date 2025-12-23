@@ -1,4 +1,9 @@
+import { useEffect, useRef } from "react";
 import { ArrowRight, ExternalLink, Github } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const projects = [
   {
@@ -22,7 +27,7 @@ const projects = [
   {
     id: 3,
     title: "E-commerce Platform",
-    description: "Full-featured e-commerce plateform with user authentication and payment processing.",
+    description: "Full-featured e-commerce platform with user authentication and payment processing.",
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQD0jhl6b3Q37jQOw02YnU0Y7XRt9e_JcIXXA&s",
     tags: ["React", "Node.js", "Stripe"],
     demoUrl: "#",
@@ -31,17 +36,55 @@ const projects = [
 ]
 
 function ProjectSection() {
+  const sectionRef = useRef(null);
+  const headingRef = useRef(null);
+  const cardsRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Heading Animation
+      gsap.from(headingRef.current, {
+        scrollTrigger: {
+          trigger: headingRef.current,
+          start: "top 80%",
+        },
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out"
+      });
+
+      // Cards Animation
+      gsap.from(cardsRef.current.children, {
+        scrollTrigger: {
+          trigger: cardsRef.current,
+          start: "top 80%",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: "power3.out"
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section id="project" className="py-24 px-4 relative">
+    <section ref={sectionRef} id="project" className="py-24 px-4 relative">
       <div className="container mx-auto max-w-5xl">
-        <h2 className="text-3xl md:text-4xl font-bold mb-4 text-center">
-          Featured <span className="text-primary">Projects</span>
-        </h2>
-        <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-          Here are some of my recent projects. Each project was carefully
-          crafted with attension to detail, Performance, and user experience.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div ref={headingRef} className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Featured <span className="text-primary">Projects</span>
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Here are some of my recent projects. Each project was carefully
+            crafted with attention to detail, Performance, and user experience.
+          </p>
+        </div>
+
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, key) => (
             <div className="group bg-card rounded-lg overflow-hidden shadow-xs card-hover" key={key}>
               <div className="h-48 overflow-hidden">
@@ -56,18 +99,20 @@ function ProjectSection() {
                   ))}
                 </div>
               </div>
-              <h3 className="text-xl font-semibold mb-1">{project.title}</h3>
-              <p className="text-muted-foreground text-sm mb-4">
-                {project.description}
-              </p>
-              <div className="flex justify-between item-center">
-                <div className="flex space-x-3">
-                  <a href={project.demoUrl} target="_blank" className="py-4 pl-4 text-foreground/80 hover:text-primary transition-colors duration-300">
-                    <ExternalLink size={20} />
-                  </a>
-                  <a href={project.githubUrl} target="_blank" className="py-4 text-foreground/80 hover:text-primary transition-colors duration-300">
-                    <Github size={20} />
-                  </a>
+              <div className="px-6 pb-6">
+                <h3 className="text-xl font-semibold mb-1">{project.title}</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  {project.description}
+                </p>
+                <div className="flex justify-between item-center">
+                  <div className="flex space-x-3">
+                    <a href={project.demoUrl} target="_blank" className="text-foreground/80 hover:text-primary transition-colors duration-300">
+                      <ExternalLink size={20} />
+                    </a>
+                    <a href={project.githubUrl} target="_blank" className="text-foreground/80 hover:text-primary transition-colors duration-300">
+                      <Github size={20} />
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
