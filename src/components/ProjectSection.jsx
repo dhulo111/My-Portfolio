@@ -118,7 +118,7 @@ function ProjectSection() {
             </div>
           ))}
         </div>
-        <div className="text-center mt-12">
+        <div className="text-center mt-22">
           <a target="_blank" href="https://github.com/dhulo111" className="cosmic-button w-fit flex item-center mx-auto gap-2">
             Check My Github <ArrowRight size={26} />
           </a>
