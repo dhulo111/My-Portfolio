@@ -1,66 +1,154 @@
 import { useEffect, useState } from "react";
 import { Cn } from '@/lib/utils.js';
-import { X, Menu } from "lucide-react";
-const navitem = [
-  { name: "home", href: "#hero" },
+import { X, Menu, Sparkles } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
+
+const navItems = [
+  { name: "Home", href: "#hero" },
   { name: "About", href: "#about" },
-  { name: "skill", href: "#skill" },
-  { name: "project", href: "#project" },
-  { name: "contact", href: "#contact" },
-]
+  { name: "Skills", href: "#skill" },
+  { name: "Projects", href: "#project" },
+  { name: "Contact", href: "#contact" },
+];
+
 function Navbar() {
-  const [isScrolled, setIsScroll] = useState(true);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
+
   useEffect(() => {
     const handleScroll = () => {
-      setIsScroll(window.screenY > 10);
+      setIsScrolled(window.scrollY > 20);
+
+      const sections = navItems.map(item => item.href.substring(1));
+      const scrollPosition = window.scrollY + 100;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element && element.offsetTop <= scrollPosition && (element.offsetTop + element.offsetHeight) > scrollPosition) {
+          setActiveSection(section);
+        }
+      }
     };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  }, [])
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [isMenuOpen]);
+
   return (
-    <nav className={Cn("fixed w-full z-40 transition-all duration-300",
-      isScrolled ? "py-5" : "py-3 bg-background/80 backdrop-blur-md shadow-xs")}>
-      <div className="container flex item-center justify-between">
-        <a className="text-xl font-bold text-primary flex items-center" href="#hero">
-          <span className="relative z-10">
-            <span className="text-glow text-foreground">Dhruvan</span>Portfolio
-          </span>
-        </a>
+    <>
+      <nav
+        className={Cn(
+          "fixed w-full top-0 z-50 transition-all duration-500 ease-in-out",
+          isScrolled
+            ? "py-4 bg-background/70 backdrop-blur-xl border-b border-white/5 shadow-sm"
+            : "py-6 bg-transparent"
+        )}
+      >
+        <div className="container mx-auto px-4 flex items-center justify-between">
+          {/* Logo */}
+          <a
+            href="#hero"
+            className="group relative flex items-center gap-2 text-xl font-bold tracking-tighter z-50"
+          >
+            <div className="relative flex h-8 w-8 items-center justify-center rounded-xl bg-primary/20 transition-transform duration-500 group-hover:rotate-180">
+              <Sparkles className="h-5 w-5 text-primary" />
+            </div>
+            <span className="relative z-10">
+              <span className="text-foreground transition-colors duration-300 group-hover:text-primary">Dhruvan</span>
+              <span className="text-primary transition-colors duration-300 group-hover:text-foreground">Portfolio</span>
+            </span>
+          </a>
 
-        {/* desktop nav */}
-        <div className="hidden md:flex space-x-8">
-          {navitem.map((item, key) => (
-            <a key={key} href={item.href} className="text-foreground /80 hover:text-primary transition-colors duration-300">{item.name}</a>
-          ))}
-        </div>
-        {/* mobile nav */}
+          {/* Desktop Nav Actions */}
+          <div className="hidden md:flex items-center gap-8">
+            {/* Simple Link Navigation (No Pill Background) */}
+            <div className="flex items-center gap-6">
+              {navItems.map((item) => {
+                const isActive = activeSection === item.href.substring(1);
+                return (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className={Cn(
+                      "relative text-sm font-medium transition-all duration-300 hover:text-primary",
+                      isActive
+                        ? "text-primary scale-105 font-semibold"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    {item.name}
+                    {isActive && (
+                      <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full animate-fade-in" />
+                    )}
+                  </a>
+                );
+              })}
+            </div>
 
-        <button onClick={() => setIsMenuOpen((prev) => !prev)}
-          className="md:hidden p-2 max-sm:pr-14 text-foreground z-50"
-          aria-label={isMenuOpen ? "close menu" : "open menu"}
-        >{isMenuOpen ? <X size={24} /> : <Menu size={24} />}</button>
+            {/* Theme Toggle Only */}
+            <div className="pl-4 border-l border-white/10">
+              <ThemeToggle />
+            </div>
+          </div>
 
-        <div className={Cn("fixed inset-0 z-40 bg-background/60 h-[269px] flex flex-col ",
-          "transition-all duration-300 md:hidden",
-          isMenuOpen ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        )}>
-          <div className="flex flex-col   space-y-8 text-xl">
-            {navitem.map((item, key) => (
+          {/* Mobile Actions */}
+          <div className="md:hidden flex items-center gap-4 z-50">
+            <ThemeToggle />
+
+            {/* Mobile Menu Toggle */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2 text-foreground hover:text-primary transition-colors relative focus:outline-none"
+              aria-label="Toggle menu"
+            >
+              <div className="relative w-6 h-6">
+                <span className={Cn("absolute block w-6 h-0.5 bg-current transition-all duration-300", isMenuOpen ? "rotate-45 top-3" : "top-1")} />
+                <span className={Cn("absolute block w-6 h-0.5 bg-current transition-all duration-300 top-3", isMenuOpen ? "opacity-0" : "opacity-100")} />
+                <span className={Cn("absolute block w-6 h-0.5 bg-current transition-all duration-300", isMenuOpen ? "-rotate-45 top-3" : "top-5")} />
+              </div>
+            </button>
+          </div>
+
+          {/* Mobile Overlay */}
+          <div
+            className={Cn(
+              "fixed inset-0 bg-background/98 backdrop-blur-3xl z-40 flex flex-col items-center justify-center space-y-8 transition-all duration-500 md:hidden",
+              isMenuOpen ? "opacity-100 clip-circle-full" : "opacity-0 clip-circle-0 pointer-events-none"
+            )}
+            style={{
+              clipPath: isMenuOpen ? "circle(150% at 90% 5%)" : "circle(0% at 90% 5%)",
+              transition: "clip-path 0.7s ease-in-out, opacity 0.5s ease-in-out"
+            }}
+          >
+            {navItems.map((item, idx) => (
               <a
-                key={key}
+                key={item.name}
                 href={item.href}
-                className="text-foreground/80 hover:text-primary transition-colors duration-300"
+                className="relative text-3xl font-bold text-foreground overflow-hidden group"
                 onClick={() => setIsMenuOpen(false)}
-              >{item.name}</a>
+              >
+                <span className="inline-block transition-transform duration-300 group-hover:-translate-y-full">
+                  {item.name}
+                </span>
+                <span className="absolute left-0 top-0 inline-block translate-y-full text-primary transition-transform duration-300 group-hover:translate-y-0">
+                  {item.name}
+                </span>
+              </a>
             ))}
           </div>
         </div>
-      </div>
-    </nav>
-  )
+      </nav>
+    </>
+  );
 }
 
 export default Navbar;

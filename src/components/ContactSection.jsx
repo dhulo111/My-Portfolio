@@ -1,18 +1,34 @@
 import { Instagram, Linkedin, Mail, MapPin, Phone, Send, Twitch, Twitter } from "lucide-react";
-import {Cn} from "@/lib/utils";
-import { useState } from "react";
+import { Cn } from "@/lib/utils";
+import { useState, useRef } from "react";
+import emailjs from '@emailjs/browser';
 
-function ContactSection(){
-  const [isSubmiting,setIsSubmiting]=useState(false);
-  const handlesubmit=(e)=>{
+function ContactSection() {
+  const form = useRef();
+  const [isSubmiting, setIsSubmiting] = useState(false);
+
+  const handlesubmit = (e) => {
     e.preventDefault();
     setIsSubmiting(true);
-    setTimeout(()=>{
-      alert("Message sent!\nThank You for Your message. I'll get back to you soon..")
 
-    },1500)
-    setIsSubmiting(false);
+    // REPLACE THESE with your actual EmailJS Service ID, Template ID, and Public Key
+    const SERVICE_ID = "service_ih5fdxd";
+    const TEMPLATE_ID = "template_s7g7o31";
+    const PUBLIC_KEY = "Wfp2aDg3KNxYkytzU";
+
+    emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form.current, PUBLIC_KEY)
+      .then((result) => {
+        alert("Message sent!\nThank You for Your message. I'll get back to you soon.");
+        e.target.reset();
+      }, (error) => {
+        console.log(error.text);
+        alert("Failed to send message. Please check your config.");
+      })
+      .finally(() => {
+        setIsSubmiting(false);
+      });
   }
+
   return (
     <section id="contact" className="py-24 px-4 relative bg-secondary/30">
       <div className="container mx-auto max-w-5xl">
@@ -29,36 +45,36 @@ function ContactSection(){
             <div className="space-y-6 justify-center">
               <div className="flex item-start space-x-4">
                 <div className="p-3 rounded-full bg-primary/10">
-                  <Mail className="h-6 w-6 text-primary"/>
+                  <Mail className="h-6 w-6 text-primary" />
                 </div>
                 <div>
                   <h4 className="font-medium"> Email</h4>
                   <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                     dhruvanpatel8866@gmail.com
+                    dhruvanpatel8866@gmail.com
                   </a>
                 </div>
               </div>
 
               <div className="flex item-start space-x-4">
                 <div className="p-3 rounded-full bg-primary/10">
-                  <Phone className="h-6 w-6 text-primary"/>
+                  <Phone className="h-6 w-6 text-primary" />
                 </div>
                 <div>
                   <h4 className="font-medium"> Phone</h4>
                   <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                     +91 (8866525914)
+                    +91 (8866525914)
                   </a>
                 </div>
               </div>
 
               <div className="flex item-start space-x-4">
                 <div className="p-3 rounded-full bg-primary/10">
-                  <MapPin className="h-6 w-6 text-primary"/>
+                  <MapPin className="h-6 w-6 text-primary" />
                 </div>
                 <div>
                   <h4 className="font-medium"> Location</h4>
                   <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                     Ahmedabad, GJ, India
+                    Ahmedabad, GJ, India
                   </a>
                 </div>
               </div>
@@ -83,47 +99,47 @@ function ContactSection(){
             </div>
           </div>
 
-          <div className="bg-card p-8 rounded-lg shadow-xs" onSubmit={handlesubmit}>
+          <div className="bg-card p-8 rounded-lg shadow-xs">
             <h3 className="text-2xl font-semibold mb-6">Send a Message</h3>
-            <form className="space-y-6">
+            <form ref={form} className="space-y-6" onSubmit={handlesubmit}>
               <div>
-                <lable htmlFor="name" className="block text-sm font-medium mb-2">Your Name</lable>
+                <label htmlFor="name" className="block text-sm font-medium mb-2">Your Name</label>
                 <input
-                   type="text"
-                   id="name"
-                   name="name"
-                   required
-                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary"
-                   placeholder="ex.Dhruvan Vachhani...."/>
+                  type="text"
+                  id="name"
+                  name="user_name"
+                  required
+                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary"
+                  placeholder="ex.Dhruvan Vachhani...." />
 
               </div>
 
               <div>
-                <lable htmlFor="email" className="block text-sm font-medium mb-2">Your Email</lable>
+                <label htmlFor="email" className="block text-sm font-medium mb-2">Your Email</label>
                 <input
-                   type="email"
-                   id="email"
-                   name="email"
-                   required
-                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary"
-                   placeholder="ex.dhruvanpatel8866@gmail.com"/>
+                  type="email"
+                  id="email"
+                  name="user_email"
+                  required
+                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary"
+                  placeholder="ex.dhruvanpatel8866@gmail.com" />
 
               </div>
 
               <div>
-                <lable htmlFor="message" className="block text-sm font-medium mb-2">Your Message</lable>
+                <label htmlFor="message" className="block text-sm font-medium mb-2">Your Message</label>
                 <input
-                   type="text"
-                   id="message"
-                   name="message"
-                   required
-                   className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary resize-none"
-                   placeholder="Hello, I'd like to talk about..."/>
+                  type="text"
+                  id="message"
+                  name="message"
+                  required
+                  className="w-full px-4 py-3 rounded-md border border-input bg-background focus:outline-hidden focus:ring-2 focus:ring-primary resize-none"
+                  placeholder="Hello, I'd like to talk about..." />
 
               </div>
               <button type="submit" disabled={isSubmiting} className={Cn("cosmic-button w-full flex items-center justify-center gap-2")}>
-                {isSubmiting?"sending....":"Send Messge"}
-                <Send size={20}/>
+                {isSubmiting ? "sending...." : "Send Messge"}
+                <Send size={20} />
               </button>
             </form>
           </div>
