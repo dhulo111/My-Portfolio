@@ -36,11 +36,9 @@ function Navbar() {
   }, []);
 
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    // Mobile menu no longer locks scroll
+    // This effect is intentionally left empty or removed to allow scrolling
+    // while the dropdown is open, as per "not show full page" request.
   }, [isMenuOpen]);
 
   return (
@@ -48,8 +46,8 @@ function Navbar() {
       <nav
         className={Cn(
           "fixed w-full top-0 z-50 transition-all duration-500 ease-in-out",
-          isScrolled
-            ? "py-4 bg-background/70 backdrop-blur-xl border-b border-white/5 shadow-sm"
+          isScrolled || isMenuOpen
+            ? "py-4 bg-background/80 backdrop-blur-md border-b border-border/40 shadow-sm"
             : "py-6 bg-transparent"
         )}
       >
@@ -58,20 +56,21 @@ function Navbar() {
           <a
             href="#hero"
             className="group relative flex items-center gap-2 text-xl font-bold tracking-tighter z-50"
+            onClick={() => setIsMenuOpen(false)}
           >
             <div className="relative flex h-8 w-8 items-center justify-center rounded-xl bg-primary/20 transition-transform duration-500 group-hover:rotate-180">
               <Sparkles className="h-5 w-5 text-primary" />
             </div>
-            <span className="relative z-10">
+            <span className="relative z-10 flex gap-1">
               <span className="text-foreground transition-colors duration-300 group-hover:text-primary">Dhruvan</span>
               <span className="text-primary transition-colors duration-300 group-hover:text-foreground">Portfolio</span>
             </span>
           </a>
 
-          {/* Desktop Nav Actions */}
-          <div className="hidden md:flex items-center gap-8">
-            {/* Simple Link Navigation (No Pill Background) */}
-            <div className="flex items-center gap-6">
+          {/* Desktop Nav Actions - Visible on LG and up */}
+          <div className="hidden lg:flex items-center gap-8">
+            {/* Simple Link Navigation */}
+            <div className="flex items-center gap-8">
               {navItems.map((item) => {
                 const isActive = activeSection === item.href.substring(1);
                 return (
@@ -95,13 +94,13 @@ function Navbar() {
             </div>
 
             {/* Theme Toggle Only */}
-            <div className="pl-4 border-l border-white/10">
+            <div className="pl-6 border-l border-border/20">
               <ThemeToggle />
             </div>
           </div>
 
-          {/* Mobile Actions */}
-          <div className="md:hidden flex items-center gap-4 z-50">
+          {/* Mobile/Tablet Actions - Visible up to LG */}
+          <div className="lg:hidden flex items-center gap-4 z-50">
             <ThemeToggle />
 
             {/* Mobile Menu Toggle */}
@@ -118,32 +117,37 @@ function Navbar() {
             </button>
           </div>
 
-          {/* Mobile Overlay */}
+          {/* Mobile Overlay / Dropdown */}
           <div
             className={Cn(
-              "fixed inset-0 bg-background/98 backdrop-blur-3xl z-40 flex flex-col items-center justify-center space-y-8 transition-all duration-500 md:hidden",
-              isMenuOpen ? "opacity-100 clip-circle-full" : "opacity-0 clip-circle-0 pointer-events-none"
+              "absolute top-full left-0 w-full bg-background/95 backdrop-blur-xl border-b border-border/40 shadow-xl flex flex-col items-center justify-start py-8 gap-6 transition-all duration-500 lg:hidden overflow-hidden",
+              isMenuOpen ? "max-h-[500px] opacity-100 visible" : "max-h-0 opacity-0 invisible py-0"
             )}
-            style={{
-              clipPath: isMenuOpen ? "circle(150% at 90% 5%)" : "circle(0% at 90% 5%)",
-              transition: "clip-path 0.7s ease-in-out, opacity 0.5s ease-in-out"
-            }}
           >
-            {navItems.map((item, idx) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="relative text-3xl font-bold text-foreground overflow-hidden group"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <span className="inline-block transition-transform duration-300 group-hover:-translate-y-full">
+            {navItems.map((item, idx) => {
+              const isActive = activeSection === item.href.substring(1);
+              return (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className={Cn(
+                    "relative text-lg font-medium transition-all duration-300 hover:text-primary",
+                    isActive ? "text-primary" : "text-foreground"
+                  )}
+                  style={{
+                    transitionDelay: isMenuOpen ? `${idx * 50}ms` : '0ms',
+                    opacity: isMenuOpen ? 1 : 0,
+                    transform: isMenuOpen ? 'translateY(0)' : 'translateY(-10px)'
+                  }}
+                  onClick={() => setIsMenuOpen(false)}
+                >
                   {item.name}
-                </span>
-                <span className="absolute left-0 top-0 inline-block translate-y-full text-primary transition-transform duration-300 group-hover:translate-y-0">
-                  {item.name}
-                </span>
-              </a>
-            ))}
+                  {isActive && (
+                    <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-primary rounded-full animate-fade-in" />
+                  )}
+                </a>
+              )
+            })}
           </div>
         </div>
       </nav>
