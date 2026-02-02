@@ -8,30 +8,31 @@ gsap.registerPlugin(ScrollTrigger);
 const projects = [
   {
     id: 1,
-    title: "Career Devlopment System",
-    description: "A beautiful career devlopment system using React and Talwind.",
-    image: "./career.png",
+    title: "Trend Twist – Social Media Platform",
+    description: "A modern Instagram-style social media platform built with the MERN stack, featuring real-time posts, likes, follows, stories, and dynamic user profiles.",
+    image: "./image.png",
     tags: ["React", "MongoDB", "Express.js"],
-    demoUrl: "#",
-    githubUrl: "#",
+    demoUrl: "https://trend-twist.vercel.app/",
+    githubUrl: "https://github.com/dhulo111",
+
   },
   {
     id: 2,
-    title: "Online food delivery system",
-    description: "A beautiful online food delivery system using React and Talwind.",
-    image: "./image.png",
-    tags: ["HTML", "CSS"],
+    title: "Career Devlopment System",
+    description: "A modern career growth platform built with React and Tailwind, helping users explore skills, courses, and professional opportunities through an intuitive and responsive interface.",
+    image: "./career.png",
+    tags: ["React", "MongoDB", "Express.js"],
     demoUrl: "#",
-    githubUrl: "#",
+    githubUrl: "https://github.com/dhulo111",
   },
   {
     id: 3,
     title: "Medical System",
-    description: "Full-featured e-commerce platform with user authentication and payment processing.",
+    description: "A full-featured medical e-commerce platform with authentication, medicine ordering, and payment processing built using the MERN stack.",
     image: "./image1.png",
     tags: ["React", "Express.js", "MongoDB"],
     demoUrl: "#",
-    githubUrl: "#",
+    githubUrl: "https://github.com/dhulo111",
   },
 ]
 
