@@ -109,7 +109,7 @@ function Hero3D() {
   }, []);
 
   return (
-    <div className="w-full h-full min-h-[400px] flex items-center justify-center relative z-10">
+    <div className="w-full h-full min-h-[400px] flex items-center justify-center relative z-10 pointer-events-none">
       <Canvas camera={{ position: [0, 0, cameraZoom], fov: 45 }} gl={{ antialias: true, alpha: true }}>
         {/* Lighter Environment */}
         <ambientLight intensity={0.6} /> {/* Significantly brighter ambient light */}
