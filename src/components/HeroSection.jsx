@@ -108,8 +108,7 @@ function HeroSection() {
           <div ref={visualsRef} className="w-full lg:w-1/2 h-[500px] lg:h-[600px] relative z-10">
             <Hero3D />
 
-            {/* Background Glow Effect behind 3D model */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-primary/20 blur-[100px] -z-10 rounded-full"></div>
+          
           </div>
         </div>
       </div>

@@ -109,7 +109,7 @@ function Hero3D() {
   }, []);
 
   return (
-    <div className="w-full h-full min-h-[400px] flex items-center justify-center relative z-10 cursor-move">
+    <div className="w-full h-full min-h-[400px] flex items-center justify-center relative z-10">
       <Canvas camera={{ position: [0, 0, cameraZoom], fov: 45 }} gl={{ antialias: true, alpha: true }}>
         {/* Lighter Environment */}
         <ambientLight intensity={0.6} /> {/* Significantly brighter ambient light */}
@@ -133,6 +133,9 @@ function Hero3D() {
         <OrbitControls
           enableZoom={false}
           enablePan={false}
+          enableRotate={false}
+          autoRotate={true}
+          autoRotateSpeed={0.5}
           minPolarAngle={Math.PI / 4}
           maxPolarAngle={Math.PI / 1.5}
         />
