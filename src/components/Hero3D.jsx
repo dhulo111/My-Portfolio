@@ -109,35 +109,68 @@ function Hero3D() {
   }, []);
 
   return (
-    <div className="w-full h-full min-h-[400px] flex items-center justify-center relative z-10 pointer-events-none">
-      <Canvas camera={{ position: [0, 0, cameraZoom], fov: 45 }} gl={{ antialias: true, alpha: true }}>
-        {/* Lighter Environment */}
-        <ambientLight intensity={0.6} /> {/* Significantly brighter ambient light */}
+    <div className="w-full h-full min-h-[400px] flex items-center justify-center relative z-10">
+      <Canvas camera={{ position: [0, 0, cameraZoom], fov: 45 }} gl={{ antialias: true, alpha: true, shadows: "basic" }}>
+        {/* Realistic Lighting Setup */}
+        {/* Ambient light for overall scene illumination */}
+        <ambientLight intensity={0.4} color="#ffffff" />
+
+        {/* Primary light source - Simulating sunlight */}
         <directionalLight
-          position={[5, 3, 5]}
-          intensity={3.5}
-          color="#ffffff"
+          position={[8, 5, 8]}
+          intensity={2.5}
+          color="#fdb813"
           castShadow
+          shadow-mapSize-width={2048}
+          shadow-mapSize-height={2048}
         />
-        {/* Fill light */}
-        <pointLight position={[-5, 0, -5]} intensity={1.0} color="#6366f1" />
+
+        {/* Secondary fill light - Simulating skylight */}
+        <directionalLight
+          position={[-3, 2, -8]}
+          intensity={0.8}
+          color="#87ceeb"
+        />
+
+        {/* Moonlight effect - Point light with cool color tone */}
+        <pointLight
+          position={[-6, 4, 0]}
+          intensity={0.6}
+          color="#b0c4de"
+          distance={30}
+          decay={2}
+        />
+
+        {/* Backlight for rim lighting effect */}
+        <pointLight
+          position={[0, -3, -5]}
+          intensity={0.4}
+          color="#4a90e2"
+          distance={20}
+          decay={2}
+        />
 
         {/* Floating Animation */}
         <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
-          <Earth />
-          <Moon />
+          <Earth castShadow />
+          <Moon castShadow />
         </Float>
 
         {/* Note: Stars component removed as requested */}
 
+        {/* Interactive OrbitControls */}
         <OrbitControls
-          enableZoom={false}
-          enablePan={false}
-          enableRotate={false}
+          enableZoom={true}
+          enablePan={true}
+          enableRotate={true}
           autoRotate={true}
           autoRotateSpeed={0.5}
           minPolarAngle={Math.PI / 4}
           maxPolarAngle={Math.PI / 1.5}
+          minDistance={3}
+          maxDistance={12}
+          dampingFactor={0.05}
+          enableDamping={true}
         />
       </Canvas>
     </div>
