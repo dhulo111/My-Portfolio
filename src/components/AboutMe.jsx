@@ -85,11 +85,7 @@ function AboutMe() {
             <div className="flex flex-col sm:flex-row gap-4 pt-4 justify-center md:justify-start">
               <a href="#contact" className="cosmic-button">Get In Touch</a>
               <a
-<<<<<<< HEAD
                 href="/DhruvanVachhaniResume.pdf"
-=======
-                href="/resume.pdf"
->>>>>>> 19671070bf1c539d41ce6f4ae6188ce9466f7a9b
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-2 rounded-full border border-primary text-primary hover:bg-primary/10 transition-colors duration-300 flex items-center justify-center"
