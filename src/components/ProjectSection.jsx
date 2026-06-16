@@ -1,0 +1,132 @@
+import { useEffect, useRef } from "react";
+import { ArrowRight, ExternalLink, Github } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const projects = [
+  {
+    id: 1,
+    title: "Trend Twist – Social Media Platform",
+    description: "A modern Instagram-style social media platform built with the MERN stack, featuring real-time posts, likes, follows, stories, and dynamic user profiles.",
+    image: "./image.png",
+    tags: ["React", "MongoDB", "Express.js"],
+    demoUrl: "https://trend-twist.vercel.app/",
+    githubUrl: "https://github.com/dhulo111",
+
+  },
+  {
+    id: 2,
+    title: "Career Devlopment System",
+    description: "A modern career growth platform built with React and Tailwind, helping users explore skills, courses, and professional opportunities through an intuitive and responsive interface.",
+    image: "./career.png",
+    tags: ["React", "MongoDB", "Express.js"],
+    demoUrl: "#",
+    githubUrl: "https://github.com/dhulo111",
+  },
+  {
+    id: 3,
+    title: "Medical System",
+    description: "A full-featured medical e-commerce platform with authentication, medicine ordering, and payment processing built using the MERN stack.",
+    image: "./image1.png",
+    tags: ["React", "Express.js", "MongoDB"],
+    demoUrl: "#",
+    githubUrl: "https://github.com/dhulo111",
+  },
+]
+
+function ProjectSection() {
+  const sectionRef = useRef(null);
+  const headingRef = useRef(null);
+  const cardsRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Heading Animation
+      gsap.from(headingRef.current, {
+        scrollTrigger: {
+          trigger: headingRef.current,
+          start: "top 80%",
+        },
+        y: 30,
+        opacity: 0,
+        duration: 0.8,
+        ease: "power3.out"
+      });
+
+      // Cards Animation
+      gsap.from(cardsRef.current.children, {
+        scrollTrigger: {
+          trigger: cardsRef.current,
+          start: "top 80%",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: "power3.out"
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section ref={sectionRef} id="project" className="py-24 px-4 relative">
+      <div className="container mx-auto max-w-5xl">
+        <div ref={headingRef} className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            Featured <span className="text-primary">Projects</span>
+          </h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Here are some of my recent projects. Each project was carefully
+            crafted with attention to detail, Performance, and user experience.
+          </p>
+        </div>
+
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((project, key) => (
+            <div className="group bg-card rounded-lg overflow-hidden shadow-xs card-hover" key={key}>
+              <div className="h-48 overflow-hidden">
+                <img src={project.image} alt={project.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+              </div>
+              <div className="p-6">
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {project.tags.map((tag) => (
+                    <span className="px-2 py-1 text-xs font-medium rounded-full border bg-primary/20 text-secondary-foreground">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <div className="px-6 pb-6">
+                <h3 className="text-xl font-semibold mb-1">{project.title}</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  {project.description}
+                </p>
+                <div className="flex justify-between item-center">
+                  <div className="flex space-x-3">
+                    <a href={project.demoUrl} target="_blank" className="text-foreground/80 hover:text-primary transition-colors duration-300">
+                      <ExternalLink size={20} />
+                    </a>
+                    <a href={project.githubUrl} target="_blank" className="text-foreground/80 hover:text-primary transition-colors duration-300">
+                      <Github size={20} />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="text-center mt-22">
+          <a target="_blank" href="https://github.com/dhulo111" className="cosmic-button w-fit flex item-center mx-auto gap-2">
+            Check My Github <ArrowRight size={26} />
+          </a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export default ProjectSection;
